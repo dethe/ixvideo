@@ -19,8 +19,8 @@
   let video;
   let poseNet;
   let poses = [];
-  let color1 = 0;
-  let color2 = 0;
+  let strokehue = 0;
+  let strokesaturation = 0;
   let videoShowing = false;
   let song;
   let analyzer;
@@ -60,8 +60,13 @@
     // Patch the input to an volume analyzer
     analyzer.setInput(song);
 
+    // set colour mode to HSB, 360, 100, 100, 1
+    colorMode(HSB);
+
     // no fill in the circles
     noFill();
+    song.play();
+    song.setLoop(true);
   }
 
 
@@ -76,8 +81,8 @@
     scale(-1, 1);
     translate(-width, 0);
     // Change background color based on the audio amplitude
-    bkg = map(rms, 0, 1, 255, 0);
-    background(bkg, bkg, 255, 40);
+    bkg = map(rms, 0, 1, 300, 340);
+    background(bkg, 30, 75, 40);
 
     // Display the video behind the sketch (if the button has been toggled)
     if (videoShowing) {
@@ -85,7 +90,7 @@
     }
 
     // Make the lines change color based on wrist position
-    stroke(color1, 24, color2);
+    stroke(strokehue, strokesaturation, 50);
 
     // Draw figure
     drawKeypoints();
@@ -167,8 +172,8 @@
         line(rightAnkle.position.x+random(-30, 30), rightAnkle.position.y+random(-30, 30) , rightKnee.position.x+random(-30, 30), rightKnee.position.y+random(-30, 30));
 
         // change stroke based on user's wrist position
-        color1 = map(rightWrist.position.y, 0, height, 255, 0);
-        color2 = map(leftWrist.position.y, 0, height, 255, 0);
+        strokehue = map(rightWrist.position.y, 0, height, 300, 340);
+        strokesaturation = map(leftWrist.position.y, 0, height, 70, 100);
       }
     }
   }
@@ -192,17 +197,6 @@
       this.innerHTML = 'Hide Video';
     }else{
       this.innerHTML = 'Show Video';
-    }
-  }
-
-  // Click to start playing music
-  mousePressed = () => {
-    if (song.isPlaying()) {
-      song.stop();
-      background(255, 0, 0);
-    } else {
-      song.play();
-      background(0, 255, 0);
     }
   }
 
