@@ -41,7 +41,7 @@
   setup = () => {
     createCanvas(windowWidth, windowHeight);
     video = createCapture(VIDEO);
-    video.size(height, height); // video should be square
+    video.size(width, height); // video should be square
 
     // Create a new poseNet method with a single detection
     poseNet = ml5.poseNet(video, modelReady);
